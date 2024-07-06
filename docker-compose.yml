@@ -1,0 +1,38 @@
+version: "3"
+services:
+  php:
+    container_name: "api-treinototal-walle"
+    build: .
+    command: "npm run dev"
+    working_dir: /var/www/html
+    environment:
+      - PHP_ENV=production
+    expose:
+      - "3000"
+    ports:
+      - "3307:3000"
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql_walle
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - "6007:3306"
+    volumes:
+      - Y:\\docker-volumes\\mysql-dsi\\treinototal-walle:/var/lib/mysql
+      # Adicione volumes conforme necessário para inicialização do banco de dados
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
